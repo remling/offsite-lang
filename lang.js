@@ -4,11 +4,11 @@ function displayOnLoad() {
 
     client.auth
         .loginWithCredential(new stitch.AnonymousCredential())
-        .then(displayParagraphs)
+        .then(displayStrings)
         .catch(console.error);
 }
 
-function displayParagraphs() {
+function displayStrings() {
   db.collection('strings')
     .find({}, { limit: 100 })
     .asArray()
