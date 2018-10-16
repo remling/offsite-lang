@@ -13,17 +13,18 @@ function displayStrings() {
     .find({}, { limit: 100 })
     .asArray()
     .then(docs => docs.map(doc => `<div>${doc.content}</div>`).join(''))
-    .then(strings => document.getElementById("strings").innerHTML = strings);
+    .then(strings => document.getElementById("strings").innerHTML = strings)
+    .catch(err => console.log(err));
 }
 
+function addString(string) {
+  client = getClient();
+  db = getDB(client);
 
-function addString(string){
-    console.log("Text is " + string)
-    client.auth.loginWithCredential(new stitch.AnonymousCredential()).then(() =>
-        db.collection("strings").insertOne({content: string})
-    ).catch(err =>
-        console.error(err)
-    )
+  client.auth
+    .loginWithCredential(new stitch.AnonymousCredential())
+    .then(() => db.collection("strings").insertOne({content: string}))
+    .catch(err => console.error(err));
 }
 
 function getClient() {
