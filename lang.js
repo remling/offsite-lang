@@ -16,6 +16,16 @@ function displayStrings() {
     .then(strings => document.getElementById("strings").innerHTML = strings);
 }
 
+
+function addString(string){
+    console.log("Text is " + string)
+    client.auth.loginWithCredential(new stitch.AnonymousCredential()).then(() =>
+        db.collection("strings").insertOne({content: string})
+    ).catch(err =>
+        console.error(err)
+    )
+}
+
 function getClient() {
     return stitch.Stitch.initializeDefaultAppClient('offsite-language-app-oubno');
 }
