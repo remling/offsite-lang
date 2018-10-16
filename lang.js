@@ -1,14 +1,7 @@
+client = stitch.Stitch.initializeDefaultAppClient('offsite-language-app-oubno');
+db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('lang');
+
 function displayOnLoad() {
-    client = getClient();
-    db = getDB(client);
-
-    client.auth
-        .loginWithCredential(new stitch.AnonymousCredential())
-        .then(displayStrings)
-        .catch(console.error);
-}
-
-function displayStrings() {
   db.collection('strings')
     .find({}, { limit: 100 })
     .asArray()
@@ -18,50 +11,27 @@ function displayStrings() {
 }
 
 function addString(string) {
-  client = getClient();
-  db = getDB(client);
-
-  client.auth
-    .loginWithCredential(new stitch.AnonymousCredential())
-    .then(() => db.collection("strings").insertOne({content: string}))
+  db.collection("strings")
+    .insertOne({content: document.getElementById("new_string").value})
     .catch(err => console.error(err));
 }
 
-function addString(string) {
-    client = getClient();
-    db = getDB(client);
-  
-    client.auth
-      .loginWithCredential(new stitch.AnonymousCredential())
-      .then(() => db.collection("strings").insertOne({content: string}))
-      .catch(err => console.error(err));
-}
-
 function addWord(word) {
-    client = getClient();
-    db = getDB(client);
-  
-    client.auth
-      .loginWithCredential(new stitch.AnonymousCredential())
-      .then(() => db.collection("words").insertOne(word))
-      .catch(err => console.error(err));
-}
-
-function getClient() {
-    return stitch.Stitch.initializeDefaultAppClient('offsite-language-app-oubno');
-}
-
-function getDB(client) {
-    return client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('lang');
+  db.collection("words")
+    .insertOne(word)
+    .catch(err => console.error(err));
 }
 
 function getWordToSave() {
-    textbox = document.getElementById('paragraph')
-    trinput = document.getElementById('selectionTranslation')
-    t = textbox.value.substr(textbox.selectionStart, textbox.selectionEnd - textbox.selectionStart);
-    word = {
-        'from': 
-    }
-    addWord()
-    console.log(t)
+  textbox = document.getElementById('paragraph')
+  trinput = document.getElementById('selectionTranslation')
+  t = textbox.value.substr(textbox.selectionStart, textbox.selectionEnd - textbox.selectionStart);
+  console.log(t, trinput.value)
+  word = {
+    'from': t,
+    'to': trinput.value,
+    'from_lang': 'english',
+    'to_lang': 'german'
+  }
+  addWord(word)
 }
