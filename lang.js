@@ -1,11 +1,15 @@
 client = stitch.Stitch.initializeDefaultAppClient('offsite-language-app-oubno');
 db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('lang');
 
+
 function displayOnLoad() {
   client.auth
     .loginWithCredential(new stitch.AnonymousCredential())
+    .then(displayStrings)
     .catch(console.error);
+}
 
+function displayStrings() {
   db.collection('strings')
     .find({}, { limit: 100 })
     .asArray()
@@ -15,10 +19,6 @@ function displayOnLoad() {
 }
 
 function addString(string) {
-  client.auth
-    .loginWithCredential(new stitch.AnonymousCredential())
-    .catch(console.error);
-
   db.collection("strings")
     .insertOne({content: document.getElementById("new_string").value})
     .catch(err => console.error(err));
